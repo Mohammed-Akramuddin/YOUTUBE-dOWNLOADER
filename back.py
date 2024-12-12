@@ -21,6 +21,7 @@ app.add_middleware(
 
 
 
+
 # Serve static files
 app.mount("/", StaticFiles(directory=".", html=True))
 
