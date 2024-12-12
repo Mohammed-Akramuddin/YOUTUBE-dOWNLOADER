@@ -6,7 +6,7 @@ submitButton.addEventListener("click", async () => {
 
     if (videoUrl) {
         try {
-            const response = await fetch("http://my-youtube-downloader.onrender.com/download", {
+            const response = await fetch("https://<your-render-service-name>.onrender.com/download", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
