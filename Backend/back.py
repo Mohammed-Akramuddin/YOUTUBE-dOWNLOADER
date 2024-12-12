@@ -11,11 +11,12 @@ app = FastAPI()
 # Adjust the URL to your frontend hosted on GitHub Pages
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Replace with your GitHub Pages URL
+    allow_origins=["https://youtube-downloader-1-ccz6.onrender.com"],  # Replace with your actual frontend URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 # Directory setup for downloads
 cur_dir = os.getcwd()
