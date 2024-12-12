@@ -9,13 +9,16 @@ from urllib.parse import urlparse
 app = FastAPI()
 
 # CORS Middleware Configuration
+
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"],  # Adjust this to specific domains if needed
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 # Serve static files
 app.mount("/", StaticFiles(directory=".", html=True))
