@@ -6,7 +6,7 @@ submitButton.addEventListener("click", async () => {
 
     if (videoUrl) {
         try {
-           const response = await fetch("https://cors-anywhere.herokuapp.com/https://<your-render-service-name>.onrender.com/download", {
+           const response = await fetch("https://youtube-downloader-s1ev.onrender.com/download", {
     method: "POST",
     headers: {
         "Content-Type": "application/json",
