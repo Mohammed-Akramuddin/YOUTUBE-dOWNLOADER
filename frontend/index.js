@@ -9,14 +9,13 @@ submitButton.addEventListener("click", async () => {
             console.log("Sending request to backend with video URL:", videoUrl);
 
             // Use the actual URL of your deployed backend on Render
-            const response = await fetch("http://127.0.0.1:8000/download", {
+            const response = await fetch("https://youtube-downloader-9tyc.onrender.com/download", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({ link: videoUrl }),
             });
-            
 
             console.log("Response received from backend:", response);
 
