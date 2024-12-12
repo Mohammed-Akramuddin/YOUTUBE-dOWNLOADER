@@ -17,7 +17,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Serve static files (HTML, CSS, JS)
+# Serve static files
 app.mount("/", StaticFiles(directory=".", html=True))
 
 cur_dir = os.getcwd()
@@ -37,6 +37,10 @@ def background_download(link: str):
             "merge_output_format": "mp4",
             "outtmpl": os.path.join(downloads_dir, "%(title)s.%(ext)s"),
             "noplaylist": True,
+            "postprocessors": [{
+                "key": "FFmpegVideoConvertor",
+                "preferedformat": "mp4"
+            }],
         }
 
         with YoutubeDL(options) as ydl:
@@ -53,6 +57,7 @@ async def download_video(request: Request, background_tasks: BackgroundTasks):
         raise HTTPException(status_code=400, detail="Invalid or missing YouTube link")
 
     try:
+        # Schedule background download task
         background_tasks.add_task(background_download, link)
         return {"message": "Download started in the background"}
     except HTTPException as e:
