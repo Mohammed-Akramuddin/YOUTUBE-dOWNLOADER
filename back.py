@@ -18,6 +18,7 @@ app.add_middleware(
 )
 
 
+
 # Directory setup for downloads
 cur_dir = os.getcwd()
 downloads_dir = os.path.join(cur_dir, "downloads")
