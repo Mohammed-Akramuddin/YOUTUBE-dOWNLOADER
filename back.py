@@ -3,14 +3,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 import os
 from yt_dlp import YoutubeDL
-import time
 from urllib.parse import urlparse
 
 app = FastAPI()
 
 # CORS Middleware Configuration
-
-
+# Adjust the URL to your frontend hosted on GitHub Pages
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["https://mohammed-akramuddin.github.io"],  # Replace with your GitHub Pages URL
@@ -19,12 +17,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
-
-
-# Serve static files
-app.mount("/", StaticFiles(directory=".", html=True))
-
+# Directory setup for downloads
 cur_dir = os.getcwd()
 downloads_dir = os.path.join(cur_dir, "downloads")
 os.makedirs(downloads_dir, exist_ok=True)
@@ -37,10 +30,12 @@ def is_valid_youtube_url(url):
 # Background Download Function
 def background_download(link: str):
     try:
+        # Get the path to the system's default Downloads directory
+        downloads_path = os.path.join(os.path.expanduser("~"), "Downloads")
         options = {
             "format": "bestvideo+bestaudio/best",
             "merge_output_format": "mp4",
-            "outtmpl": os.path.join(downloads_dir, "%(title)s.%(ext)s"),
+            "outtmpl": os.path.join(downloads_path, "%(title)s.%(ext)s"),
             "noplaylist": True,
             "postprocessors": [{
                 "key": "FFmpegVideoConvertor",
@@ -50,22 +45,26 @@ def background_download(link: str):
 
         with YoutubeDL(options) as ydl:
             ydl.download([link])
+        print(f"Download completed for: {link}")
     except Exception as e:
-        print(f"Download error: {e}")
+        print(f"Download error for {link}: {e}")
 
 @app.post("/download")
 async def download_video(request: Request, background_tasks: BackgroundTasks):
-    data = await request.json()
-    link = data.get("link")
-
-    if not link or not is_valid_youtube_url(link):
-        raise HTTPException(status_code=400, detail="Invalid or missing YouTube link")
-
     try:
-        # Schedule background download task
+        data = await request.json()
+        link = data.get("link")
+        print(f"Received download request for link: {link}")
+
+        if not link or not is_valid_youtube_url(link):
+            raise HTTPException(status_code=400, detail="Invalid or missing YouTube link")
+
         background_tasks.add_task(background_download, link)
-        return {"message": "Download started in the background"}
-    except HTTPException as e:
-        return {"error": str(e.detail)}
+        return {"message": "Video download started successfully!"}
+
+    except HTTPException as http_err:
+        print(f"HTTP error: {http_err.detail}")
+        raise http_err
     except Exception as e:
-        return {"error": f"Unexpected error: {str(e)}"}
+        print(f"Unexpected error: {e}")
+        return {"error": f"Unexpected error: {e}"}
