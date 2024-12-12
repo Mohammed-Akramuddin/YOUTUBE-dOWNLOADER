@@ -13,11 +13,12 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Adjust this to specific domains if needed
+    allow_origins=["*"],  # Allow all origins for testing, then restrict to specific domains
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 
 # Serve static files
