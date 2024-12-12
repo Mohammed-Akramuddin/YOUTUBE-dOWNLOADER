@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Request, BackgroundTasks, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 import os
 from yt_dlp import YoutubeDL
 import time
@@ -16,6 +17,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Serve static files
+app.mount("/", StaticFiles(directory=".", html=True))
+
+# Get environment variables
+YOUTUBE_API_KEY = os.getenv("83554edc17eaa9194b917e2564132160")
+
 cur_dir = os.getcwd()
 downloads_dir = os.path.join(cur_dir, "downloads")
 os.makedirs(downloads_dir, exist_ok=True)
@@ -29,10 +36,14 @@ def is_valid_youtube_url(url):
 def background_download(link: str):
     try:
         options = {
-            "format": "bestvideo+bestaudio/best",  # Download best available video and audio
-            "merge_output_format": "mp4",         # Ensure output is in MP4 format
+            "format": "bestvideo+bestaudio/best",
+            "merge_output_format": "mp4",
             "outtmpl": os.path.join(downloads_dir, "%(title)s.%(ext)s"),
-            "noplaylist": True,                    # Only download a single video, not a playlist
+            "noplaylist": True,
+            "postprocessors": [{
+                "key": "FFmpegVideoConvertor",
+                "preferedformat": "mp4"
+            }],
         }
 
         with YoutubeDL(options) as ydl:
