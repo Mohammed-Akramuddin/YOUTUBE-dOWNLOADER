@@ -8,16 +8,13 @@ from urllib.parse import urlparse
 app = FastAPI()
 
 # CORS Middleware Configuration
-# Adjust the URL to your frontend hosted on GitHub Pages
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://mohammed-akramuddin.github.io"],
+    allow_origins=["https://mohammed-akramuddin.github.io"],  # Base GitHub Pages URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
 
 # Directory setup for downloads
 cur_dir = os.getcwd()
@@ -34,6 +31,8 @@ def background_download(link: str):
     try:
         # Get the path to the system's default Downloads directory
         downloads_path = os.path.join(os.path.expanduser("~"), "Downloads")
+        print(f"Download path: {downloads_path}")
+
         options = {
             "format": "bestvideo+bestaudio/best",
             "merge_output_format": "mp4",
