@@ -11,7 +11,7 @@ app = FastAPI()
 # Adjust the URL to your frontend hosted on GitHub Pages
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://mohammed-akramuddin.github.io"],
+    allow_origins=["https://mohammed-akramuddin.github.io/YOUTUBE-dOWNLOADER/"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
