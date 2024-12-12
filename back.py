@@ -13,7 +13,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow all origins for testing, then restrict to specific domains
+    allow_origins=["https://mohammed-akramuddin.github.io"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
