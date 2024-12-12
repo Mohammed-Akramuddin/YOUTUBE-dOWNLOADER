@@ -12,7 +12,7 @@ app = FastAPI()
 # CORS Middleware Configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://mohammed-akramuddin.github.io"],  # Base GitHub Pages URL
+    allow_origins=["https://youtube-downloader-1-3xal.onrender.com"],  # Base GitHub Pages URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
